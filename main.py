@@ -89,6 +89,8 @@ class Trainer:
 
     def train_epoch(self):
         for i, (batch, label) in enumerate(self.train_data_loader):
+	    # There seems to be an issue with the range of labels, quick fix
+            label = label - min(label)
             self.train_batch(batch.cuda(), label.cuda())
 
 def get_args():
