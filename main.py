@@ -94,12 +94,14 @@ class Trainer:
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--train", dest="train", action="store_true")
+    parser.add_argument("--test", dest="test", action="store_true")
     parser.add_argument("--decompose", dest="decompose", action="store_true")
     parser.add_argument("--fine_tune", dest="fine_tune", action="store_true")
     parser.add_argument("--train_path", type = str, default = "train")
     parser.add_argument("--test_path", type = str, default = "test")
     parser.add_argument("--cp", dest="cp", action="store_true", \
         help="Use cp decomposition. uses tucker by default")
+    parser.add_argument("--trained_model_path", type = str, default="model")
     parser.set_defaults(train=False)
     parser.set_defaults(decompose=False)
     parser.set_defaults(fine_tune=False)
@@ -167,3 +169,28 @@ if __name__ == '__main__':
         trainer.train(epoches=100)
         model.eval()
         trainer.test()
+
+    elif args.test:
+        trained_model = torch.load(args.trained_model_path)
+        test_data_loader = dataset.test_loader(args.test_path)
+
+        criterion = torch.nn.CrossEntropyLoss()
+
+        trained_model.cuda()
+        trained_model.eval()
+
+        correct = 0
+        total = 0
+        total_time = 0
+        for i, (batch, label) in enumerate(test_data_loader):
+            batch = batch.cuda()
+            t0 = time.time()
+            output = trained_model(Variable(batch)).cpu()
+            t1 = time.time()
+            total_time = total_time + (t1 - t0)
+            pred = output.data.max(1)[1]
+            correct += pred.cpu().eq(label).sum()
+            total += label.size(0)
+
+        print("Accuracy :", float(correct) / total)
+        print("Average prediction time", float(total_time) / (i + 1), i + 1)
