@@ -99,10 +99,11 @@ def get_args():
     parser.add_argument("--test", dest="test", action="store_true")
     parser.add_argument("--decompose", dest="decompose", action="store_true")
     parser.add_argument("--fine_tune", dest="fine_tune", action="store_true")
+    parser.add_argument("--epochs", type = int, default=10)
     parser.add_argument("--train_path", type = str, default = "train")
     parser.add_argument("--test_path", type = str, default = "test")
     parser.add_argument("--cp", dest="cp", action="store_true", \
-        help="Use cp decomposition. uses tucker by default")
+        help="Use cp decomposition. uses CP by default")
     parser.add_argument("--trained_model_path", type = str, default="model")
     parser.set_defaults(train=False)
     parser.set_defaults(decompose=False)
@@ -165,10 +166,10 @@ if __name__ == '__main__':
 
         trainer = Trainer(args.train_path, args.test_path, model, optimizer)
 
-        trainer.test()
-        model.cuda()
-        model.train()
-        trainer.train(epoches=100)
+        trainer.test() # Test the model without any fine-tuning
+        model.cuda() 
+        model.train() # Put the model into "training" mode
+        trainer.train(epoches=args.epochs)
         model.eval()
         trainer.test()
 
