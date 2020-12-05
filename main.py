@@ -173,6 +173,8 @@ if __name__ == '__main__':
         model.eval()
         trainer.test()
 
+        torch.save(model, 'decomposed_finetuned_model')
+
     elif args.test:
         trained_model = torch.load(args.trained_model_path)
         test_data_loader = dataset.test_loader(args.test_path)
