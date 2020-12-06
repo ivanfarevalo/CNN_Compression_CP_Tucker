@@ -124,7 +124,7 @@ if __name__ == '__main__':
         model = ModifiedVGG16Model().cuda()
         print("Total number of parameters: {}".format(self.compute_num_parameters()))
 	
-	  optimizer = optim.SGD(model.classifier.parameters(), lr=0.0001, momentum=0.99)
+	optimizer = optim.SGD(model.classifier.parameters(), lr=0.0001, momentum=0.99)
         trainer = Trainer(args.train_path, args.test_path, model, optimizer)
 
         trainer.train(epoches = 10)
