@@ -35,6 +35,10 @@ class ModifiedVGG16Model(torch.nn.Module):
             nn.ReLU(inplace=True),
             nn.Linear(4096, 2))
 
+    def compute_num_parameters(self):
+        self.num_parameters = sum(p.numel() for p in self.parameters())
+        return self.num_parameters
+
     def forward(self, x):
         x = self.features(x)
         x = x.view(x.size(0), -1)
@@ -118,7 +122,8 @@ if __name__ == '__main__':
 
     if args.train:
         model = ModifiedVGG16Model().cuda()
-        optimizer = optim.SGD(model.classifier.parameters(), lr=0.0001, momentum=0.99)
+        print("Total number of parameters: {}".format(self.compute_num_parameters))
+	optimizer = optim.SGD(model.classifier.parameters(), lr=0.0001, momentum=0.99)
         trainer = Trainer(args.train_path, args.test_path, model, optimizer)
 
         trainer.train(epoches = 10)
@@ -126,6 +131,7 @@ if __name__ == '__main__':
 
     elif args.decompose:
         model = torch.load("model").cuda()
+	print("Total number of parameters before decomposition: {}".format(self.compute_num_parameters()))
         model.eval()
         model.cpu()
         N = len(model.features._modules.keys())
@@ -144,6 +150,8 @@ if __name__ == '__main__':
                 model.features._modules[key] = decomposed
 
             torch.save(model, 'decomposed_model')
+
+	print("Total number of parameters after decomposition: {}".format(self.compute_num_parameters()))
 
 
     elif args.fine_tune:
