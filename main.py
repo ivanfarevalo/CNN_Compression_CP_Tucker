@@ -272,6 +272,7 @@ if __name__ == '__main__':
         print("Compression ratio: {}\n".format(num_params_uncompressed / num_params_compressed))
 
         print("Uncompressed Accuracy :", uncomp_acc)
+        print("Uncompressed Accuracy :\n", comp_acc)
         print("Average uncompressed prediction time", uncomp_time)
-        print("Uncompressed Accuracy :", uncomp_acc)
         print("Average uncompressed prediction time", comp_time)
+        print("Speed up ratio", uncomp_time/comp_time)
