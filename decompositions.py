@@ -9,6 +9,7 @@ def cp_decomposition_conv_layer(layer, rank):
     """ Gets a conv layer and a target rank, 
         returns a nn.Sequential object with the decomposition """
 
+    print('rank chosen: {}'.format(rank))
     # Perform CP decomposition on the layer weight tensorly.
     # print(layer.weight.data.shape)
     weights, factors = parafac(layer.weight.data, rank=rank, init='svd')
