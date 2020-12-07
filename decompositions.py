@@ -26,7 +26,7 @@ def cp_decomposition_conv_layer(layer, rank):
             groups=y_dim.shape[1], bias=False)
 
     depthwise_horizontal_layer = \
-        torch.nn.Conv2d(in_channels=horizontal.shape[1], \
+        torch.nn.Conv2d(in_channels=x_dim.shape[1], \
             out_channels=x_dim.shape[1], 
             kernel_size=(1, x_dim.shape[0]), stride=layer.stride,
             padding=(0, layer.padding[0]), 
