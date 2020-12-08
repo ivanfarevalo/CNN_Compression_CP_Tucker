@@ -122,11 +122,11 @@ if __name__ == '__main__':
     tl.set_backend('pytorch')
 
     if args.train:
-        model = ModifiedVGG16Model().cuda()
+        model = ModifiedAlexNetModel().cuda()
         optimizer = optim.SGD(model.classifier.parameters(), lr=0.0001, momentum=0.99)
         trainer = Trainer(args.train_path, args.test_path, model, optimizer)
 
-        trainer.train(epoches = 10)
+        trainer.train(epoches = args.epochs)
         torch.save(model, "model")
 
     elif args.decompose:
