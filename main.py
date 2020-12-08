@@ -16,16 +16,18 @@ import tensorly
 from itertools import chain
 from decompositions import cp_decomposition_conv_layer, tucker_decomposition_conv_layer
 
-# VGG16 based network for classifying between dogs and cats.
+# Alexnet based network for classifying between 6 categories.
 # After training this will be an over parameterized network,
 # with potential to shrink it.
 class ModifiedAlexNetModel(torch.nn.Module):
     def __init__(self, model=None):
-        super(ModifiedVGG16Model, self).__init__()
+        super(ModifiedAlexNetModel, self).__init__()
 
         model = models.alexnet(pretrained=True)
 
         self.features = model.features
+
+        self.avgpool = nn.AdaptiveAvgPool2d((6, 6))
 
         self.classifier = nn.Sequential(
             nn.Dropout(),

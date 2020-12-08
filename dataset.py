@@ -13,6 +13,7 @@ import glob
 import os
 
 def loader(path, batch_size=64, num_workers=4, pin_memory=True):
+    # Alexnet same normalization
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     return data.DataLoader(
         datasets.ImageFolder(path,
@@ -29,6 +30,7 @@ def loader(path, batch_size=64, num_workers=4, pin_memory=True):
         pin_memory=pin_memory)
 
 def test_loader(path, batch_size=64, num_workers=4, pin_memory=True):
+    # Alexnet same normalization
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     return data.DataLoader(
         datasets.ImageFolder(path,
