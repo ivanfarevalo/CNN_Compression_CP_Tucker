@@ -150,9 +150,9 @@ if __name__ == '__main__':
 
                 model.features._modules[key] = decomposed
 
-            torch.save(model, 'decomposed_model')
-            print("Total number of parameters after decomposition: {}".format(model.compute_num_parameters()))
-            print('decomposed model\n{}'.format(model))
+        torch.save(model, 'decomposed_model')
+        print("Total number of parameters after decomposition: {}".format(model.compute_num_parameters()))
+        print('decomposed model\n{}'.format(model))
 
 
     elif args.fine_tune:
