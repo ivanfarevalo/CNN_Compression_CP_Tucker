@@ -144,7 +144,7 @@ if __name__ == '__main__':
                 if args.cp:
                     rank = max(conv_layer.weight.data.numpy().shape)//3
                     # hard-coding the rank. Change later
-                    decomposed = cp_decomposition_conv_layer(conv_layer, rank=12)
+                    decomposed = cp_decomposition_conv_layer(conv_layer, rank=rank)
                 else:
                     decomposed = tucker_decomposition_conv_layer(conv_layer)
 
