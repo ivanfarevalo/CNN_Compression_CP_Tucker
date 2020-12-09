@@ -133,7 +133,7 @@ if __name__ == '__main__':
         model = torch.load("model").cuda()
         print("Total number of parameters before decomposition: {}".format(model.compute_num_parameters()))
         model.eval()
-        # model.cpu()
+        model.cpu()
         N = len(model.features._modules.keys())
         for i, key in enumerate(model.features._modules.keys()):
 

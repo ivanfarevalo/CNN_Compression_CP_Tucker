@@ -11,7 +11,8 @@ def cp_decomposition_conv_layer(layer, rank):
 
     print('rank chosen: {}'.format(rank))
     # Perform CP decomposition on the layer weight tensorly.
-    # print(layer.weight.data.shape)
+    print(type(layer.weight.data))
+    print(layer.weight.data.shape)
     weights, factors = parafac(layer.weight.data, rank=rank, init='svd')
     t_dim, s_dim, y_dim, x_dim = factors
     # last, first, vertical, horizontal = \
