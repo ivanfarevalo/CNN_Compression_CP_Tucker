@@ -16,8 +16,6 @@ import tensorly
 from itertools import chain
 from decompositions import cp_decomposition_conv_layer, tucker_decomposition_conv_layer
 
-import tensorly.decomposition import CP
-
 
 # VGG16 based network for classifying between dogs and cats.
 # After training this will be an over parameterized network,
@@ -154,7 +152,7 @@ if __name__ == '__main__':
 
                     model.features._modules[key] = decomposed
 
-        torch.save(model, 'decomposed_model_3_layers')
+        torch.save(model, 'decomposed_model_more_layers')
         print("Total number of parameters after decomposition: {}".format(model.compute_num_parameters()))
         print('decomposed model\n{}'.format(model))
 
