@@ -136,6 +136,8 @@ if __name__ == '__main__':
     args = get_args()
     tl.set_backend('pytorch')
 
+    
+
     if args.train:
         model = ModifiedVGG16Model().cuda()
         print("Total number of parameters: {}".format(model.compute_num_parameters()))
@@ -171,6 +173,9 @@ if __name__ == '__main__':
         print("Total number of parameters after decomposition: {}".format(model.compute_num_parameters()))
         print('decomposed model\n{}'.format(model))
 
+        with open('drive/MyDrive/results.txt', 'w') as fp:
+            fp.write('parameters after decomposition: {}'.format(model.compute_num_parameters()))
+
 
     elif args.fine_tune:
         base_model = torch.load("decomposed_model")
@@ -199,7 +204,7 @@ if __name__ == '__main__':
         model.eval()
         trainer.test()
 
-        torch.save(model, 'decomposed_finetuned_model')
+        torch.save(model, 'drive/MyDrive/decomposed_finetuned_vgg16_CP_model')
 
     elif args.test:
         trained_model = torch.load(args.trained_model_path)
