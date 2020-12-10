@@ -152,6 +152,8 @@ if __name__ == '__main__':
         model = torch.load("model").cuda()
         model.eval()
         model.cpu()
+        print("Total number of parameters before decomposition: {}".format(model.compute_num_parameters()))
+
         N = len(model.features._modules.keys())
         for i, key in enumerate(model.features._modules.keys()):
 
@@ -168,6 +170,7 @@ if __name__ == '__main__':
                 model.features._modules[key] = decomposed
 
         torch.save(model, 'decomposed_model')
+        print("Total number of parameters before decomposition: {}".format(model.compute_num_parameters()))
 
 
     elif args.fine_tune:
