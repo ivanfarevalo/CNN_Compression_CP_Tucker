@@ -136,10 +136,6 @@ if __name__ == '__main__':
     args = get_args()
     tl.set_backend('pytorch')
 
-if __name__ == '__main__':
-    args = get_args()
-    tl.set_backend('pytorch')
-
     if args.train:
         model = ModifiedAlexNetModel().cuda()
         optimizer = optim.SGD(model.classifier.parameters(), lr=0.0001, momentum=0.99)
