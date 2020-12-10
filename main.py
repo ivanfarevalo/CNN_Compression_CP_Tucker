@@ -109,13 +109,32 @@ def get_args():
     parser.add_argument("--test_path", type = str, default = "test")
     parser.add_argument("--cp", dest="cp", action="store_true", \
         help="Use cp decomposition. uses CP by default")
-    parser.add_argument("--trained_model_path", type = str, default="model")
+    parser.add_argument("--results", dest="results", action="store_true")
+    parser.add_argument("--trained_model_path", type=str, default="model")
+    parser.add_argument("--decomposed_model_path", type=str, default="decomposed_finetuned_model")
     parser.set_defaults(train=False)
+    parser.set_defaults(results=False)
     parser.set_defaults(decompose=False)
     parser.set_defaults(fine_tune=False)
     parser.set_defaults(cp=False)    
     args = parser.parse_args()
     return args
+
+def compute_num_parameters(model):
+    num_parameters = sum(p.numel() for p in model.parameters())
+    return num_parameters
+
+def compression_results():
+    num_params_uncompressed = model.compute_num_parameters()
+    num_params_compressed = model.compute_num_parameters()
+    print("\n\n#################### Results #########################\n\n")
+    print("Total number of parameters before decomposition: {}".format(num_params_uncompressed))
+    print("Total number of parameters after decomposition: {}".format(num_params_compressed))
+    print("Compression ratio: {}".format(num_params_uncompressed / num_params_compressed))
+
+if __name__ == '__main__':
+    args = get_args()
+    tl.set_backend('pytorch')
 
 if __name__ == '__main__':
     args = get_args()
@@ -204,3 +223,50 @@ if __name__ == '__main__':
 
         print("Accuracy :", float(correct) / total)
         print("Average prediction time", float(total_time) / (i + 1), i + 1)
+
+    elif args.results:
+        def evaluate(model, test_data_loader):
+            correct = 0
+            total = 0
+            total_time = 0
+            for i, (batch, label) in enumerate(test_data_loader):
+                batch = batch.cuda()
+                t0 = time.time()
+                output = model(Variable(batch)).cpu()
+                t1 = time.time()
+                total_time = total_time + (t1 - t0)
+                pred = output.data.max(1)[1]
+                correct += pred.cpu().eq(label).sum()
+                total += label.size(0)
+            accuracy = float(correct) / total
+            total_time = float(total_time) / (i + 1)
+            return accuracy, total_time
+
+
+        uncompressed_model = torch.load(args.trained_model_path)
+        compressed_model = torch.load(args.decomposed_model_path)
+        num_params_uncompressed = compute_num_parameters(uncompressed_model)
+        num_params_compressed = compute_num_parameters(compressed_model)
+
+        test_data_loader = dataset.test_loader(args.test_path)
+
+        criterion = torch.nn.CrossEntropyLoss()
+
+        uncompressed_model.cuda()
+        uncompressed_model.eval()
+        uncomp_acc, uncomp_time = evaluate(uncompressed_model, test_data_loader)
+
+        compressed_model.cuda()
+        compressed_model.eval()
+        comp_acc, comp_time = evaluate(compressed_model, test_data_loader)
+
+        print("\n\n#################### Results #########################\n\n")
+        print("Total number of parameters before decomposition: {}".format(num_params_uncompressed))
+        print("Total number of parameters after decomposition: {}".format(num_params_compressed))
+        print("Compression ratio: {}\n".format(num_params_uncompressed / num_params_compressed))
+
+        print("Uncompressed Accuracy :", uncomp_acc)
+        print("Uncompressed Accuracy :\n", comp_acc)
+        print("Average uncompressed prediction time", uncomp_time)
+        print("Average uncompressed prediction time", comp_time)
+        print("Speed up ratio", uncomp_time / comp_time)
