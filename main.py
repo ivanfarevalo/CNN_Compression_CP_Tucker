@@ -139,7 +139,7 @@ if __name__ == '__main__':
 
             if i >= N - 2:
                 break
-            if i == 19:
+            if i == 19 or i == 17 or i == 14:
                 if isinstance(model.features._modules[key], torch.nn.modules.conv.Conv2d):
                     conv_layer = model.features._modules[key]
                     if args.cp:
@@ -151,7 +151,7 @@ if __name__ == '__main__':
 
                     model.features._modules[key] = decomposed
 
-        torch.save(model, 'decomposed_model_2_layers')
+        torch.save(model, 'decomposed_model_3_layers')
         print("Total number of parameters after decomposition: {}".format(model.compute_num_parameters()))
         print('decomposed model\n{}'.format(model))
 
