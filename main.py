@@ -112,6 +112,7 @@ def get_args():
     parser.add_argument("--results", dest="results", action="store_true")
     parser.add_argument("--trained_model_path", type=str, default="model")
     parser.add_argument("--decomposed_model_path", type=str, default="decomposed_finetuned_model")
+    parser.add_argument("--save_a_layer", dest="save_a_layer", action="store_true")
     parser.set_defaults(train=False)
     parser.set_defaults(results=False)
     parser.set_defaults(decompose=False)
@@ -270,3 +271,8 @@ if __name__ == '__main__':
         print("Average uncompressed prediction time", uncomp_time)
         print("Average uncompressed prediction time", comp_time)
         print("Speed up ratio", uncomp_time / comp_time)
+
+    elif args.save_a_layer:
+        model = torch.load('model')
+        
+        print(model)
