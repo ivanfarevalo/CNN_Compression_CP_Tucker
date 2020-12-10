@@ -16,6 +16,9 @@ import tensorly
 from itertools import chain
 from decompositions import cp_decomposition_conv_layer, tucker_decomposition_conv_layer
 
+import tensorly as tl
+from tensorly.decomposition import parafac
+
 # Alexnet based network for classifying between 6 categories.
 # After training this will be an over parameterized network,
 # with potential to shrink it.
@@ -274,5 +277,12 @@ if __name__ == '__main__':
 
     elif args.save_a_layer:
         model = torch.load('model')
-        
-        print(model)
+
+        chosen_layer = model.features[3].weight.data
+
+        # Do CP decompositions and iterate over different ranks
+        for rank in range(50, 150, 10):
+            weights, factors = parafac(chosen_layer, rank=rank, init='random')
+            print('rank={}  error={}'.format(rank, torch.norm(chosen_layer - tl.cp_to_tensor)))
+            
+
