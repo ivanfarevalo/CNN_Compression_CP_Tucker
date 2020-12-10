@@ -221,6 +221,9 @@ if __name__ == '__main__':
         print("Accuracy :", float(correct) / total)
         print("Average prediction time", float(total_time) / (i + 1), i + 1)
 
+        num_parameters = sum(p.numel() for p in model.parameters())
+        print(num_parameters)
+
     elif args.results:
         def evaluate(model, test_data_loader):
             correct = 0
