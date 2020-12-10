@@ -113,6 +113,7 @@ def get_args():
     parser.add_argument("--trained_model_path", type=str, default="model")
     parser.add_argument("--decomposed_model_path", type=str, default="decomposed_finetuned_model")
     parser.set_defaults(train=False)
+    parser.set_defaults(results=False)
     parser.set_defaults(decompose=False)
     parser.set_defaults(fine_tune=False)
     parser.set_defaults(cp=False)    
