@@ -281,9 +281,11 @@ if __name__ == '__main__':
         chosen_layer = model.features[3].weight.data
 
         # Do CP decompositions and iterate over different ranks
-        for rank in range(20, 250, 10):
-            weights, factors = parafac(chosen_layer, rank=rank, init='random')
-            print('rank={}  error={}'.format(rank, torch.norm(chosen_layer - tl.cp_to_tensor((weights, factors)))))
+        # for rank in range(20, 250, 10):
+        #     weights, factors = parafac(chosen_layer, rank=rank, init='random')
+        #     print('rank={}  error={}'.format(rank, torch.norm(chosen_layer - tl.cp_to_tensor((weights, factors)))))
 
-
+        print(torch.norm(chosen_layer))
+        print(chosen_layer.shape)
+        print(chosen_layer[0,0])
 
