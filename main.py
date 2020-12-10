@@ -137,7 +137,7 @@ if __name__ == '__main__':
         N = len(model.features._modules.keys())
         for i, key in enumerate(model.features._modules.keys()):
 
-            if i >= N - 2 or i != 19:
+            if i >= N - 2 or i != 20:
                 break
             if isinstance(model.features._modules[key], torch.nn.modules.conv.Conv2d):
                 conv_layer = model.features._modules[key]
