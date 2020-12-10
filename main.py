@@ -155,7 +155,7 @@ if __name__ == '__main__':
 
             if i >= N - 2:
                 break
-            if 12 <= i <= 24:
+            if 8 <= i <= 27:
                 if isinstance(model.features._modules[key], torch.nn.modules.conv.Conv2d):
                     conv_layer = model.features._modules[key]
                     if args.cp:
