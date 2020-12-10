@@ -16,6 +16,9 @@ import tensorly
 from itertools import chain
 from decompositions import cp_decomposition_conv_layer, tucker_decomposition_conv_layer
 
+import tensorly.decomposition import CP
+
+
 # VGG16 based network for classifying between dogs and cats.
 # After training this will be an over parameterized network,
 # with potential to shrink it.
@@ -139,7 +142,7 @@ if __name__ == '__main__':
 
             if i >= N - 2:
                 break
-            if i == 19 or i == 17 or i == 14:
+            if 12 <= i <= 24:
                 if isinstance(model.features._modules[key], torch.nn.modules.conv.Conv2d):
                     conv_layer = model.features._modules[key]
                     if args.cp:
