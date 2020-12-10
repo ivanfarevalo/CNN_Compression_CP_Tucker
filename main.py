@@ -137,20 +137,21 @@ if __name__ == '__main__':
         N = len(model.features._modules.keys())
         for i, key in enumerate(model.features._modules.keys()):
 
-            if i >= N - 2 or i != 20:
+            if i >= N - 2:
                 break
-            if isinstance(model.features._modules[key], torch.nn.modules.conv.Conv2d):
-                conv_layer = model.features._modules[key]
-                if args.cp:
-                    rank = max(conv_layer.weight.data.numpy().shape)//3
-                    # hard-coding the rank. Change later
-                    decomposed = cp_decomposition_conv_layer(conv_layer, rank=rank)
-                else:
-                    decomposed = tucker_decomposition_conv_layer(conv_layer)
+            if i == 19:
+                if isinstance(model.features._modules[key], torch.nn.modules.conv.Conv2d):
+                    conv_layer = model.features._modules[key]
+                    if args.cp:
+                        rank = max(conv_layer.weight.data.numpy().shape)//3
+                        # hard-coding the rank. Change later
+                        decomposed = cp_decomposition_conv_layer(conv_layer, rank=rank)
+                    else:
+                        decomposed = tucker_decomposition_conv_layer(conv_layer)
 
-                model.features._modules[key] = decomposed
+                    model.features._modules[key] = decomposed
 
-        torch.save(model, 'decomposed_model_1_layer')
+        torch.save(model, 'decomposed_model_2_layers')
         print("Total number of parameters after decomposition: {}".format(model.compute_num_parameters()))
         print('decomposed model\n{}'.format(model))
 
