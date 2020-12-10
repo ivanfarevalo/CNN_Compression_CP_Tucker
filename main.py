@@ -283,6 +283,7 @@ if __name__ == '__main__':
         # Do CP decompositions and iterate over different ranks
         for rank in range(50, 150, 10):
             weights, factors = parafac(chosen_layer, rank=rank, init='random')
-            print('rank={}  error={}'.format(rank, torch.norm(chosen_layer - tl.cp_to_tensor)))
+            print('rank={}  error={}'.format(rank, torch.norm(chosen_layer - tl.cp_to_tensor((weights, factors)))))
             
+
 
