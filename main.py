@@ -212,7 +212,6 @@ if __name__ == '__main__':
         total = 0
         total_time = 0
         for i, (batch, label) in enumerate(test_data_loader):
-            print('new batch{}'.format(i))
             batch = batch.cuda()
             t0 = time.time()
             output = trained_model(Variable(batch)).cpu()
