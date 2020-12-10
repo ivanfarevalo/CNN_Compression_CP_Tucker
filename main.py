@@ -156,14 +156,14 @@ if __name__ == '__main__':
             if isinstance(model.features._modules[key], torch.nn.modules.conv.Conv2d):
                 conv_layer = model.features._modules[key]
                 if args.cp:
-                    rank = max(conv_layer.weight.data.numpy().shape)//3
+                    rank = max(conv_layer.weight.data.numpy().shape)//2
                     decomposed = cp_decomposition_conv_layer(conv_layer, rank)
                 else:
                     decomposed = tucker_decomposition_conv_layer(conv_layer)
 
                 model.features._modules[key] = decomposed
 
-            torch.save(model, 'decomposed_model')
+        torch.save(model, 'decomposed_model')
 
 
     elif args.fine_tune:
@@ -208,6 +208,7 @@ if __name__ == '__main__':
         total = 0
         total_time = 0
         for i, (batch, label) in enumerate(test_data_loader):
+            print('new batch{}'.format(i))
             batch = batch.cuda()
             t0 = time.time()
             output = trained_model(Variable(batch)).cpu()
