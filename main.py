@@ -160,7 +160,7 @@ if __name__ == '__main__':
             if isinstance(model.features._modules[key], torch.nn.modules.conv.Conv2d):
                 conv_layer = model.features._modules[key]
                 if args.cp:
-                    rank = max(conv_layer.weight.data.numpy().shape)//2
+                    rank = max(conv_layer.weight.data.numpy().shape)//4
                     decomposed = cp_decomposition_conv_layer(conv_layer, rank)
                 else:
                     decomposed = tucker_decomposition_conv_layer(conv_layer)
